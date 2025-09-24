@@ -1,6 +1,6 @@
 {
   "name": "@papr/cli",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "PAPR Memory-Enhanced Claude CLI - AI assistant with persistent memory",
   "main": "lib/index.js",
   "bin": {
