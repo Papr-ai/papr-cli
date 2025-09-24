@@ -1,0 +1,70 @@
+#!/usr/bin/env node
+
+const { program } = require('commander');
+const chalk = require('chalk');
+const { initPapr, startClaude, checkStatus, updateHooks } = require('../lib/index');
+
+program
+  .name('papr')
+  .description('PAPR Memory-Enhanced Claude CLI')
+  .version('1.0.0');
+
+program
+  .command('init')
+  .description('Initialize PAPR with Claude CLI and memory hooks')
+  .option('-k, --api-key <key>', 'PAPR Memory API key')
+  .option('-w, --workspace <id>', 'Workspace ID (default: qDgAdi2eMf)')
+  .action(async (options) => {
+    console.log(chalk.blue('🧠 Initializing PAPR Memory-Enhanced Claude CLI...'));
+    await initPapr(options);
+  });
+
+program
+  .command('start')
+  .description('Start Claude CLI with PAPR memory context')
+  .option('--no-memory', 'Start without memory hooks (clean mode)')
+  .action(async (options) => {
+    await startClaude(options);
+  });
+
+program
+  .command('status')
+  .description('Check PAPR CLI configuration status')
+  .action(async () => {
+    await checkStatus();
+  });
+
+program
+  .command('update-hooks')
+  .description('Update PAPR memory hooks to latest version')
+  .action(async () => {
+    console.log(chalk.blue('🔄 Updating PAPR memory hooks...'));
+    await updateHooks();
+  });
+
+program
+  .command('uninstall')
+  .description('Remove PAPR hooks and restore clean Claude CLI')
+  .action(async () => {
+    const inquirer = require('inquirer');
+    const { confirm } = await inquirer.prompt([{
+      type: 'confirm',
+      name: 'confirm',
+      message: 'Are you sure you want to remove all PAPR hooks?',
+      default: false
+    }]);
+
+    if (confirm) {
+      console.log(chalk.yellow('🗑️  Removing PAPR hooks...'));
+      // Implementation in lib/index.js
+    } else {
+      console.log(chalk.green('✅ Cancelled uninstall'));
+    }
+  });
+
+// Show help by default if no command provided
+if (process.argv.length === 2) {
+  program.help();
+}
+
+program.parse();

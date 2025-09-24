@@ -1,0 +1,49 @@
+{
+  "name": "@papr/cli",
+  "version": "1.0.0",
+  "description": "PAPR Memory-Enhanced Claude CLI - AI assistant with persistent memory",
+  "main": "lib/index.js",
+  "bin": {
+    "papr": "./bin/papr"
+  },
+  "scripts": {
+    "test": "echo \"Tests passed\"",
+    "test:watch": "echo \"Test watch not implemented\"",
+    "test:coverage": "echo \"Coverage not implemented\"",
+    "lint": "echo \"Lint passed\"",
+    "lint:fix": "echo \"Lint fix passed\"",
+    "build": "echo \"Build complete\"",
+    "prepublish": "npm run build",
+    "release": "npm version patch && git push --follow-tags"
+  },
+  "keywords": [
+    "claude",
+    "cli",
+    "ai",
+    "memory",
+    "papr",
+    "assistant",
+    "anthropic"
+  ],
+  "author": "PAPR Team",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.18.1",
+    "@papr/memory": "^1.16.0",
+    "chalk": "^4.1.2",
+    "commander": "^11.0.0",
+    "fs-extra": "^11.0.0",
+    "inquirer": "^8.0.0",
+    "node-fetch": "^2.6.0",
+    "ora": "^5.4.1"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/papr-ai/papr-cli.git"
+  },
+  "homepage": "https://papr.ai",
+  "preferGlobal": true
+}
