@@ -48,6 +48,66 @@ Update memory hooks to the latest version.
 ### `papr uninstall`
 Remove PAPR hooks and restore clean Claude CLI.
 
+## AI Workflow Orchestration
+
+PAPR CLI v1.1.0+ includes a comprehensive workflow orchestration system with 4 specialized agents that coordinate feature development:
+
+### 🧠 Memory Agent
+- **Purpose**: Manages conversation context and memory operations
+- **Capabilities**: Searches previous conversations, saves important information, provides relevant context
+- **Automatic**: Activates when conversations need historical context
+
+### 📋 PRD Agent
+- **Purpose**: Creates comprehensive Product Requirements Documents
+- **Capabilities**: Researches memory for context, structures requirements, defines success metrics
+- **Usage**: Automatically invoked for new feature requests, or manually with complex planning needs
+
+### 🏗️ Architect Agent
+- **Purpose**: Technical design and implementation planning
+- **Capabilities**: Analyzes codebase patterns, creates technical architecture, breaks down features into tasks
+- **Repository Access**: Full access to analyze local repositories with Read, Glob, and Grep tools
+
+### 🔄 Workflow Orchestrator
+- **Purpose**: Coordinates multi-agent feature development workflows
+- **Capabilities**: Detects workflow needs, manages agent handoffs, tracks progress in memory
+- **Intelligence**: Distinguishes between new feature work and continuing existing projects
+
+## Automatic Workflow Process
+
+### For New Features:
+```
+User Request → Workflow Orchestrator detects "new feature"
+     ↓
+1. PRD Agent creates requirements (searches memory for context)
+     ↓
+2. Architect Agent analyzes codebase & creates technical plan + tasks
+     ↓
+3. Implementation follows task list (updates progress in memory)
+```
+
+### For Continuing Work:
+```
+User Request → Workflow Orchestrator detects "continue work"
+     ↓
+1. Memory Agent finds existing PRD, architecture, and task progress
+     ↓
+2. Resume implementation from current task status
+     ↓
+3. Update progress in memory as work continues
+```
+
+### Workflow Triggers
+
+**New Feature Development**:
+- "implement", "create feature", "build", "add functionality"
+- Complex requirements spanning multiple components
+- Features requiring architectural decisions
+
+**Continuing Work**:
+- "continue", "keep working on", "update", "modify existing"
+- References to specific features or components
+- Bug fixes or enhancements to existing functionality
+
 ## What You Get
 
 When you run `papr start`, you'll see:
