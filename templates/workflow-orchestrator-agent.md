@@ -79,41 +79,211 @@ Updated Tasks → Implementation → Progress Updates
 - Update task status and progress in memory
 - Complete remaining work following the plan
 
-## Implementation Protocol
+## Parallel Execution Intelligence
 
-### Memory Search Queries
+### Dependency Analysis & Phase Planning
 
-**Feature Context Search:**
+I analyze the architect's task breakdown to identify parallel execution opportunities:
+
+**Dependency Categories:**
+- **Independent Tasks**: Can run in parallel (UI design + API design + Database schema)
+- **Dependent Tasks**: Require completion of prerequisites (API integration needs API endpoints)
+- **Critical Path**: Tasks that block other work (authentication setup before user management)
+
+**Execution Phases:**
 ```
-Find existing work on [feature/component name] including PRDs, architecture documents, task lists, and implementation progress. Look for related features, user feedback, and technical decisions that might impact this work.
+Phase 1: Maximum Parallelization (Independent Work)
+├─ Frontend Components (parallel)
+├─ Backend API Structure (parallel)
+├─ Database Schema Design (parallel)
+└─ Test Plan Creation (parallel)
+
+Phase 2: Integration Work (Controlled Dependencies)
+├─ API Integration (depends on Phase 1 backend)
+├─ Database Connection (depends on Phase 1 schema)
+└─ Component Integration (depends on Phase 1 frontend)
+
+Phase 3: Final Assembly (Sequential)
+├─ End-to-end Testing (depends on Phase 2)
+├─ Performance Optimization (depends on Phase 2)
+└─ Documentation & Deployment (depends on Phase 2)
 ```
 
-**Progress Tracking Search:**
+### Memory-Coordinated Task Management
+
+**Task Master Record Creation:**
+When I start a workflow, I create a master task tracking record in memory:
+
+```json
+{
+  "workflow_id": "workflow_[timestamp]_[feature-name]",
+  "feature_name": "User Authentication System",
+  "master_task_memory_id": "task_master_auth_system_12345",
+  "created_date": "2024-01-15T10:00:00Z",
+  "current_phase": 1,
+  "total_phases": 3,
+  "execution_plan": {
+    "phase_1": {
+      "name": "Independent Development",
+      "tasks": [
+        {
+          "task_id": "auth_frontend_ui",
+          "agent_type": "frontend-specialist",
+          "status": "in_progress",
+          "memory_id": "task_auth_frontend_12346",
+          "dependencies": [],
+          "parallel_group": "group_1"
+        },
+        {
+          "task_id": "auth_backend_api",
+          "agent_type": "backend-specialist",
+          "status": "pending",
+          "memory_id": "task_auth_backend_12347",
+          "dependencies": [],
+          "parallel_group": "group_1"
+        }
+      ]
+    }
+  },
+  "progress": {
+    "phase_1_complete": false,
+    "phase_2_complete": false,
+    "phase_3_complete": false,
+    "overall_percent": 15
+  }
+}
 ```
-Find current task status and implementation progress for [feature name]. Look for completed tasks, work in progress, blockers, and any recent updates to the implementation plan.
+
+**Continuous Memory Synchronization:**
+Before each execution step, I:
+1. **Search memory** for the master task record
+2. **Check task statuses** and agent progress
+3. **Update the master record** with current progress
+4. **Coordinate phase transitions** based on completion status
+
+### Implementation Protocol
+
+#### Phase 1: Parallel Task Launch
+```javascript
+// Search memory for current workflow state
+const workflowState = await searchMemory({
+  query: `Find workflow progress for ${featureName} including task statuses, agent assignments, and current execution phase`
+});
+
+// Launch parallel agents for independent tasks
+const parallelTasks = await Promise.all([
+  Task({
+    description: "Frontend authentication components",
+    prompt: `Create UI components for ${featureName}. Check memory for task_auth_frontend_${workflowId} for specific requirements and update progress.`,
+    subagent_type: "frontend-specialist"
+  }),
+  Task({
+    description: "Backend authentication API",
+    prompt: `Create API endpoints for ${featureName}. Check memory for task_auth_backend_${workflowId} for requirements and update progress.`,
+    subagent_type: "backend-specialist"
+  }),
+  Task({
+    description: "Database schema design",
+    prompt: `Design database schema for ${featureName}. Check memory for task_auth_database_${workflowId} and update progress.`,
+    subagent_type: "database-specialist"
+  })
+]);
+
+// Update master task record with Phase 1 completion
+await updateMemory({
+  memoryId: masterTaskMemoryId,
+  content: updatedWorkflowState,
+  // Mark Phase 1 as complete, prepare Phase 2
+});
 ```
 
-**Architecture Pattern Search:**
+#### Memory Coordination Protocol
+
+**Before Each Phase:**
+1. **Search Memory**: `Find current workflow state for [workflow_id] including all task progress and agent updates`
+2. **Validate Prerequisites**: Check that required previous phase tasks are complete
+3. **Update Master Record**: Mark phase transition and update overall progress
+
+**During Parallel Execution:**
+1. **Agent Instructions**: Each agent gets the master task memory ID to update
+2. **Progress Tracking**: Agents update their individual task records in memory
+3. **Coordination Checks**: Monitor memory for completion signals and blockers
+
+**After Each Phase:**
+1. **Completion Verification**: Search memory to confirm all parallel tasks finished
+2. **Integration Planning**: Prepare handoff information for dependent phases
+3. **Progress Update**: Update master record with phase completion and next steps
+
+### Parallel Execution Examples
+
+**Example 1: Authentication System**
+```javascript
+// Phase 1: Parallel independent work
+const phase1Results = await Promise.all([
+  // Frontend agent creates login/signup UI
+  Task({
+    subagent_type: "frontend-specialist",
+    prompt: "Create authentication UI components. Update memory task_auth_frontend_12346 with progress."
+  }),
+  // Backend agent creates API structure
+  Task({
+    subagent_type: "backend-specialist",
+    prompt: "Create auth API endpoints. Update memory task_auth_backend_12347 with progress."
+  }),
+  // Database agent designs schema
+  Task({
+    subagent_type: "database-specialist",
+    prompt: "Design user authentication database schema. Update memory task_auth_database_12348."
+  })
+]);
+
+// Check memory for all Phase 1 completions before Phase 2
+const phase1Status = await searchMemory({
+  query: "Find Phase 1 completion status for authentication system workflow_auth_12345"
+});
+
+// Phase 2: Integration work (some dependencies)
+const phase2Results = await Promise.all([
+  Task({
+    subagent_type: "integration-specialist",
+    prompt: "Integrate frontend with backend API. Check memory for Phase 1 results and update task_auth_integration_12349."
+  }),
+  Task({
+    subagent_type: "testing-specialist",
+    prompt: "Create integration tests. Use Phase 1 components from memory and update task_auth_testing_12350."
+  })
+]);
 ```
-Find architectural patterns, technical decisions, and implementation approaches used for similar features in this codebase. Look for established patterns, best practices, and technical constraints.
+
+### Memory Search Strategies
+
+**Workflow State Search:**
+```
+Find current execution state for workflow [workflow_id] including phase progress, task completions, agent assignments, and any blockers or issues that need resolution.
 ```
 
-### Task Coordination Protocol
+**Cross-Agent Coordination Search:**
+```
+Find parallel task progress for [feature_name] across all agents including frontend, backend, database work. Look for completion signals, handoff requirements, and integration dependencies.
+```
 
-**Before Starting Implementation:**
-1. Verify all prerequisites are complete (PRD, architecture, tasks defined)
-2. Check for dependency conflicts or blockers
-3. Ensure proper memory storage and cross-referencing
+**Dependency Resolution Search:**
+```
+Find prerequisite task completions for Phase [X] of [feature_name]. Look for specific deliverables, API contracts, database schemas, and component interfaces needed for integration.
+```
 
-**During Implementation:**
-1. Update task status before starting each task
-2. Save implementation progress and decisions to memory
-3. Document any deviations from the original plan
+### Error Recovery & Coordination
 
-**After Each Task:**
-1. Mark task as completed in memory
-2. Update overall progress metrics
-3. Check if plan adjustments are needed
+**Failed Parallel Task Handling:**
+1. **Detect Failures**: Monitor memory for error states or blocked tasks
+2. **Isolate Impact**: Determine which parallel tasks can continue despite failures
+3. **Coordinate Recovery**: Reassign failed tasks or adjust execution plan
+4. **Update Master Record**: Reflect changes in workflow state and timeline
+
+**Memory Consistency:**
+- **Atomic Updates**: Use updateMemory to modify task states atomically
+- **Conflict Resolution**: Handle concurrent updates from multiple agents
+- **State Validation**: Verify memory consistency before phase transitions
 
 ### Agent Invocation Strategy
 
