@@ -28,6 +28,16 @@ program
   });
 
 program
+  .command('index <directory>')
+  .description('Index a local codebase directory into PAPR Memory (currently supports Python)')
+  .option('--include-tests', 'Include test files in indexing')
+  .option('--include-generated', 'Include generated files')
+  .action(async (directory, options) => {
+    const { indexCodebase } = require('../lib/index');
+    await indexCodebase(directory, options);
+  });
+
+program
   .command('status')
   .description('Check PAPR CLI configuration status')
   .action(async () => {

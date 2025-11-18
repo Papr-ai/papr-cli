@@ -112,6 +112,54 @@ class PaprMemoryServer {
               }
             }
           }
+        },
+        {
+          name: 'query_code_graphql',
+          description: 'Execute GraphQL queries against indexed code in PAPR Memory. Use introspection to discover schema and query code structure, relationships, and dependencies. This complements search_memory for structured code queries.',
+          inputSchema: {
+            type: 'object',
+            properties: {
+              query: {
+                type: 'string',
+                description: 'GraphQL query to execute. Use introspection query to discover schema first: "{ __schema { types { name fields { name type { name } } } } }"'
+              },
+              variables: {
+                type: 'object',
+                description: 'Variables for the GraphQL query (optional)',
+                default: {}
+              },
+              introspect: {
+                type: 'boolean',
+                description: 'If true, returns the GraphQL schema for indexed code (shows available types, fields, relationships)',
+                default: false
+              }
+            },
+            required: ['query']
+          }
+        },
+        {
+          name: 'index_codebase',
+          description: 'Index a local codebase directory into PAPR Memory for semantic search and GraphQL queries. Currently supports Python codebases. Creates a knowledge graph of files, functions, classes, and their relationships.',
+          inputSchema: {
+            type: 'object',
+            properties: {
+              directory: {
+                type: 'string',
+                description: 'Absolute path to the codebase directory to index (e.g., "/Users/username/projects/my-app")'
+              },
+              includeTests: {
+                type: 'boolean',
+                description: 'Include test files in indexing (default: false)',
+                default: false
+              },
+              includeGenerated: {
+                type: 'boolean',
+                description: 'Include generated files (default: false)',
+                default: false
+              }
+            },
+            required: ['directory']
+          }
         }
       ]
     }));
@@ -127,6 +175,10 @@ class PaprMemoryServer {
             return await this.handleAddMemory(args);
           case 'get_recent_memories':
             return await this.handleGetRecentMemories(args);
+          case 'query_code_graphql':
+            return await this.handleGraphQLQuery(args);
+          case 'index_codebase':
+            return await this.handleIndexCodebase(args);
           default:
             throw new McpError(ErrorCode.MethodNotFound, `Unknown tool: ${name}`);
         }
@@ -293,6 +345,152 @@ class PaprMemoryServer {
         text: `Recent memories (${memories.length}):\n\n${formattedResults}`
       }]
     };
+  }
+
+  async handleGraphQLQuery(args) {
+    const { query, variables = {}, introspect = false } = args;
+    const client = this.createPaprClient();
+
+    try {
+      // Handle introspection query
+      if (introspect) {
+        const introspectionQuery = `
+          {
+            __schema {
+              types {
+                name
+                kind
+                description
+                fields {
+                  name
+                  type {
+                    name
+                    kind
+                  }
+                }
+              }
+              queryType {
+                name
+                fields {
+                  name
+                  description
+                  args {
+                    name
+                    type {
+                      name
+                    }
+                  }
+                }
+              }
+            }
+          }
+        `;
+
+        const result = await client.graphql.query({
+          body: { query: introspectionQuery }
+        });
+
+        return {
+          content: [{
+            type: 'text',
+            text: `**GraphQL Schema Introspection**\n\n\`\`\`json\n${JSON.stringify(result, null, 2)}\n\`\`\``
+          }]
+        };
+      }
+
+      // Execute regular GraphQL query
+      const result = await client.graphql.query({
+        body: { query, variables }
+      });
+
+      return {
+        content: [{
+          type: 'text',
+          text: `**GraphQL Query Results**\n\n\`\`\`json\n${JSON.stringify(result, null, 2)}\n\`\`\``
+        }]
+      };
+    } catch (error) {
+      return {
+        content: [{
+          type: 'text',
+          text: `❌ GraphQL query failed: ${error.message}\n\nTip: Use introspect: true to discover the schema first, or check query syntax.`
+        }]
+      };
+    }
+  }
+
+  async handleIndexCodebase(args) {
+    const { directory, includeTests = false, includeGenerated = false } = args;
+    const path = require('path');
+    const fs = require('fs');
+
+    // Validate directory exists
+    if (!fs.existsSync(directory)) {
+      return {
+        content: [{
+          type: 'text',
+          text: `❌ Directory not found: ${directory}\n\nPlease provide an absolute path to an existing directory.`
+        }]
+      };
+    }
+
+    try {
+      // Import code indexer (dynamically to avoid issues if not installed)
+      const { getCodeIndexer } = require(path.join(__dirname, '..', 'lib', 'code-indexer', 'index.js'));
+      const indexer = getCodeIndexer();
+
+      // Initialize schema (creates once per API key if needed)
+      const initResult = await indexer.initialize();
+      if (!initResult.success) {
+        throw new Error(`Initialization failed: ${initResult.error}`);
+      }
+
+      // Index the directory
+      const result = await indexer.indexDirectory(directory, {
+        includeTests,
+        includeGenerated
+      });
+
+      const summary = `
+**Code Indexing Complete**
+
+📂 **Directory:** ${directory}
+✅ **Successfully indexed:** ${result.success} files
+⏭️ **Skipped:** ${result.skipped} files
+❌ **Failed:** ${result.failed} files
+
+${result.success > 0 ? `
+**Indexed Files:**
+${result.indexed.slice(0, 10).map(f => `- ${path.basename(f.path)} (${f.stats.functions} functions, ${f.stats.classes} classes)`).join('\n')}
+${result.indexed.length > 10 ? `\n...and ${result.indexed.length - 10} more files` : ''}
+` : ''}
+
+${result.failed > 0 ? `
+**Errors:**
+${result.errors.slice(0, 5).map(e => `- ${path.basename(e.path)}: ${e.error}`).join('\n')}
+${result.errors.length > 5 ? `\n...and ${result.errors.length - 5} more errors` : ''}
+` : ''}
+
+💡 **Next steps:**
+1. Use \`search_memory\` with queries like "authentication functions" to find code
+2. Use \`query_code_graphql\` with introspection to discover the code graph schema
+3. Query relationships like "functions that call login_user" using GraphQL
+`;
+
+      return {
+        content: [{
+          type: 'text',
+          text: summary
+        }]
+      };
+    } catch (error) {
+      return {
+        content: [{
+          type: 'text',
+          text: `❌ Code indexing failed: ${error.message}\n\n${error.stack || ''}`
+        }]
+      };
+    }
   }
 
   async run() {
