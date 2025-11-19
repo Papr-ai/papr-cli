@@ -211,11 +211,20 @@ class PaprMemoryServer {
     const { query, maxResults = 15 } = args;
     const client = this.createPaprClient();
 
+    console.error(`[DEBUG] Searching with query: "${query}"`);
+    console.error(`[DEBUG] Search params:`, { max_memories: Math.max(maxResults, 15), max_nodes: 15, enable_agentic_graph: true, rank_results: true });
+
     const result = await client.memory.search({
       query,
       max_memories: Math.max(maxResults, 15),
+      max_nodes: 15,
+      enable_agentic_graph: true,
       rank_results: true
     });
+
+    console.error(`[DEBUG] API Response status:`, result.status);
+    console.error(`[DEBUG] Found memories:`, result.data?.memories?.length || 0);
+    console.error(`[DEBUG] Found nodes:`, result.data?.nodes?.length || 0);
 
     if (!result.data?.memories?.length) {
       return {
@@ -316,6 +325,8 @@ class PaprMemoryServer {
     const result = await client.memory.search({
       query,
       max_memories: Math.max(limit, 15),
+      max_nodes: 15,
+      enable_agentic_graph: true,
       rank_results: true
     });
 

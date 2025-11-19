@@ -25,13 +25,15 @@ function createPaprClient() {
 
 // Tool implementations
 const tools = {
-  searchMemory: async ({ query, maxResults = 15 }) => {
+  searchMemory: async ({ query, maxResults = 15, enableAgenticGraph = true }) => {
     try {
       const client = createPaprClient();
 
       const result = await client.memory.search({
         query,
         max_memories: Math.max(maxResults, 15), // Ensure minimum 15
+        max_nodes: 15, // Recommended for graph entity relationships
+        enable_agentic_graph: enableAgenticGraph,
         rank_results: true
       });
 
@@ -142,6 +144,8 @@ const tools = {
       const result = await client.memory.search({
         query,
         max_memories: limit,
+        max_nodes: 15,
+        enable_agentic_graph: true,
         rank_results: true
       });
 

@@ -54,9 +54,9 @@ async function loadSessionContext() {
     console.log('██╔═══╝ ██╔══██║██╔═══╝ ██╔══██╗');
     console.log('██║     ██║  ██║██║     ██║  ██║');
     console.log('╚═╝     ╚═╝  ╚═╝╚═╝     ╚═╝  ╚═╝');
-    console.log('        Memory-Enhanced Claude CLI');
+    console.log('Memory-Enhanced Claude CLI');
     console.log('');
-    console.log('🧠 **Session Context:**');
+    console.log('**Session Context:**');
 
     // Display general memories
     if (generalResult.data?.memories?.length > 0) {
