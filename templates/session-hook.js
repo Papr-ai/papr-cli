@@ -184,7 +184,6 @@ async function loadSessionContext() {
     // Display PAPR banner with holiday theme if in season
     console.log('');
     if (isHolidaySeason()) {
-      await playSnowfallAnimation();
       const logo = getHolidayLogo();
       logo.forEach(line => console.log(line));
     } else {
@@ -223,6 +222,17 @@ async function loadSessionContext() {
     console.log('---');
 
   } catch (error) {
+    // Still show the logo even if memory fails
+    console.log('');
+    if (isHolidaySeason()) {
+      const logo = getHolidayLogo();
+      logo.forEach(line => console.log(line));
+    } else {
+      const logo = getRegularLogo();
+      logo.forEach(line => console.log(line));
+      console.log(CYAN('        Memory-Enhanced Claude CLI'));
+    }
+    console.log('');
     console.log('⚠️ Memory service unavailable');
     console.log('---');
   }

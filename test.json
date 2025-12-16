@@ -1,0 +1,119 @@
+{
+    "sessionToken": "r:d3556037deb146706466ffba734d5b9b",
+    "sessionTokenExpiresAt": "2026-11-19T16:43:46.156Z",
+    "objectId": "mkcNHhG5KP",
+    "id": "X1VzZXI6bWtjTkhoRzVLUA==",
+    "displayName": "Shawkat Kabbara",
+    "fullname": "Shawkat Kabbara",
+    "title": "Founder",
+    "roleDepartment": null,
+    "profileImage": {
+        "url": "https://parseserverstoragewest.blob.core.windows.net/parse/f4495e30ff4f4f07da98b07abc783ea9_4e22efe79f1525c5c9e8eb7aaeff57bf_avatar.jpeg"
+    },
+    "profileimage": {
+        "url": "https://parseserverstoragewest.blob.core.windows.net/parse/f4495e30ff4f4f07da98b07abc783ea9_4e22efe79f1525c5c9e8eb7aaeff57bf_avatar.jpeg"
+    },
+    "isSelectedWorkspaceFollower": {
+        "objectId": "pPZjal9ZYx",
+        "archive": false,
+        "workspace": {
+            "objectId": "qDgAdi2eMf",
+            "workspace_name": "Papr",
+            "workspace_url": "papr-ai.papr.ai",
+            "tenantId": "c592a8a07b83ca39",
+            "tenantAPIkey": "b2e04a8260282081c03b60f77ba94c65",
+            "subscription": {
+                "objectId": "ryuUS56Pd3",
+                "stripeCustomerId": "cus_RbIAQMbs6XgMys",
+                "status": "trial",
+                "company": {
+                    "__type": "Pointer",
+                    "className": "Company",
+                    "objectId": "BueQEWAjMj"
+                },
+                "user": {
+                    "__type": "Pointer",
+                    "className": "_User",
+                    "objectId": "mkcNHhG5KP"
+                },
+                "type": "company",
+                "isMeteredBillingOn": true,
+                "createdAt": "2025-01-17T02:47:12.714Z",
+                "updatedAt": "2025-01-17T02:47:12.714Z",
+                "__type": "Object",
+                "className": "Subscription"
+            },
+            "user": {
+                "objectId": "mkcNHhG5KP",
+                "email": "shawkat@papr.ai",
+                "userAPIkey": "YQnxXIZPT0M9JVH3L0S0MNLicDaqJ4Vd"
+            },
+            "image": {
+                "url": "https://parseserverstoragewest.blob.core.windows.net/parse/a6de04c80ca840e03ff493e28e776ced_logo-240.png"
+            },
+            "memberCount": 572,
+            "company": {
+                "objectId": "BueQEWAjMj",
+                "name": "papr-ai",
+                "displayName": "Papr",
+                "isVerified": true,
+                "logoUrl": "https://www.google.com/s2/favicons?sz=64&domain_url=papr.ai"
+            },
+            "organization": null
+        },
+        "jwtTokenForUser": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJta2NOSGhHNUtQIiwiZXh0ZXJuYWxfaWQiOiJta2NOSGhHNUtQIiwib3JnYW5pemF0aW9uIjoiVDNKbllXNXBlbUYwYVc5dU9qVTRNRGxoTW1JMkxXUmxPVGN0TkRVeE5pMWlOamsxTFdVd01HRXdZbU14TlRZeU1BPT0iLCJuYW1lIjoiU2hhd2thdCBLYWJiYXJhIiwiY3VzdG9tZXIiOiJCdWVRRVdBak1qIiwiaWF0IjoxNzMwNDczMjYxLCJleHAiOjE3MzA0ODc2NjEsInJvbGUiOiJhZG1pbiJ9.LcpCitBpq7rzvzrbYfS19n_SUmvF2jTN1COBI4M6J8PEUkF9G6hNeYoSQKwWHSK5SCsBn955iVH65Qg8vDBvslncbPF_xM9t6m-SqXo78KnqXIkQzyQwic9GNM12ujC8E7BgRcTwV4RfAEfPq7oSz9MAX0YhgvUheiOwmElm1grwP-1KEoM9zeS1jYq1qaXLHNPXfdWiaMWRZOiMADcuuPp7eicdxb04Yyn4QhnqC1Wow1dhTpXnHCAdZTSCWpOQCOQNV2qeu3QQlu9rofzuHX74ZPnDmOhVNbnQfr70Op1huFkbafClKhTWO3fAdxQunVtFV98NxUFYl25UCdocjA",
+        "isSelected": true,
+        "stripeInvoiceId": null,
+        "isMember": true,
+        "memoriesCount": 26935,
+        "miniInteractionCount": 132,
+        "premiumInteractionCount": 668,
+        "storageCount": 3411588,
+        "paprGPTSession": {
+            "objectId": "LGVYIEMgNn",
+            "successCriteria": null,
+            "objective": null,
+            "sessionId": "paprGPT-LGVYIEMgNn",
+            "workspaceContext": "Workspace Name: Papr \n Workspace URL: \"papr-ai.papr.ai\" \n Workspace Admin and creator: \"Shawkat Kabbara\" \n ",
+            "agent": {
+                "objectId": "SPBFfx3nJw",
+                "displayName": "Pen"
+            },
+            "converseGPT": {
+                "objectId": "5WBWQUh0pi",
+                "successCriteria": "No success criteria set",
+                "objective": "ConverseGPT",
+                "currentStep": 1
+            },
+            "createdAt": "2024-10-29T03:33:36.088Z",
+            "updatedAt": "2024-10-29T03:33:36.155Z"
+        }
+    },
+    "userAPIkey": "YQnxXIZPT0M9JVH3L0S0MNLicDaqJ4Vd",
+    "completedProfileSignup": true,
+    "emailVerifiedAuth0": false,
+    "defaultAgent": {
+        "objectId": "SPBFfx3nJw",
+        "displayName": "Pen",
+        "profileimage": {
+            "url": "https://parseserverstoragewest.blob.core.windows.net/parse/ca4d1587bc443be3d97f4d5292019981_papr-logo-240-c.png",
+            "name": "ca4d1587bc443be3d97f4d5292019981_papr-logo-240-c.png",
+            "__typename": "FileInfo"
+        }
+    },
+    "defaultagent": {
+        "objectId": "SPBFfx3nJw",
+        "displayName": "Pen",
+        "profileimage": {
+            "url": "https://parseserverstoragewest.blob.core.windows.net/parse/ca4d1587bc443be3d97f4d5292019981_papr-logo-240-c.png",
+            "name": "ca4d1587bc443be3d97f4d5292019981_papr-logo-240-c.png",
+            "__typename": "FileInfo"
+        }
+    },
+    "email": "shawkat@papr.ai",
+    "company": "",
+    "socialProfilePicURL": null,
+    "isCompanyAdmin": false,
+    "isPersonalAdmin": true,
+    "stripeCustomerId": "cus_RbIAQMbs6XgMys"
+}

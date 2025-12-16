@@ -178,6 +178,81 @@ const tools = {
         message: 'Failed to retrieve recent memories'
       };
     }
+  },
+
+  graphqlQuery: async ({ query, variables = {}, operationName = null, introspect = false }) => {
+    try {
+      const client = createPaprClient();
+
+      // Handle introspection query to discover schema
+      if (introspect) {
+        const introspectionQuery = `
+          query IntrospectionQuery {
+            __schema {
+              queryType { name }
+              mutationType { name }
+              types {
+                name
+                kind
+                description
+                fields {
+                  name
+                  description
+                  args {
+                    name
+                    type { name kind ofType { name kind } }
+                  }
+                  type {
+                    name
+                    kind
+                    ofType { name kind }
+                  }
+                }
+              }
+            }
+          }
+        `;
+
+        const result = await client.graphql.query({
+          body: {
+            query: introspectionQuery,
+            operationName: 'IntrospectionQuery'
+          }
+        });
+
+        return {
+          success: true,
+          data: result,
+          message: 'GraphQL schema introspection successful'
+        };
+      }
+
+      // Execute regular GraphQL query
+      const body = {
+        query,
+        variables
+      };
+
+      if (operationName) {
+        body.operationName = operationName;
+      }
+
+      const result = await client.graphql.query({ body });
+
+      return {
+        success: true,
+        data: result,
+        message: 'GraphQL query executed successfully'
+      };
+
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        message: 'GraphQL query failed',
+        hint: 'Try using introspect: true to discover the available schema first'
+      };
+    }
   }
 };
 
