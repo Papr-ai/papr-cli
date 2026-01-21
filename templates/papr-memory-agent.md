@@ -1,7 +1,7 @@
 ---
 name: papr-memory-agent
 description: Intelligent PAPR Memory management agent that automatically provides relevant context from previous conversations and saves important information to memory for future reference
-tools: paprSearchMemory,paprAddMemory,paprUpdateMemory,paprDeleteMemory,paprGetMemory
+tools: mcp__papr-memory__search_memory,mcp__papr-memory__add_memory,mcp__papr-memory__get_recent_memories,mcp__papr-memory__query_code_graphql
 model: inherit
 ---
 
